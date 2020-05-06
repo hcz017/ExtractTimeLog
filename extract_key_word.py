@@ -74,20 +74,20 @@ def calc_step_avg_time():
     for step in E_STEP_LIST:
         time_log = open("extract_split_time.log")
         step_time_list = get_step_time(step, time_log)
-        all_time_table.append(step_time_list)
         if len(step_time_list) == 0:
             print("no step: ", step, "please check!")
-            exit()
+            continue
         else:
+            all_time_table.append(step_time_list)
             max_time_val = max(max(step_time_list), max_time_val)
         time_log.close()
         # print("all_time_table", all_time_table)
         # print("step:", step, '\ntimelist:', step_time_list, "len:", len(step_time_list))
 
         if exclude_first_snapshot:
-            print("step:", step, "avg: ", (sum(step_time_list) - step_time_list[0]) / (len(step_time_list) - 1))
+            print("[step:", step, "][times:", len(step_time_list) - 1, "]\t[avg:", (sum(step_time_list) - step_time_list[0]) / (len(step_time_list) - 1), "]")
         else:
-            print("step:", step, "avg: ", np.mean(step_time_list))
+            print("[step:", step, "][times:", len(step_time_list), "]\t[avg:", np.mean(step_time_list), "]")
         if step in addend_list:
             if exclude_first_snapshot:
                 total_time += (sum(step_time_list) - step_time_list[0]) / (len(step_time_list) - 1)

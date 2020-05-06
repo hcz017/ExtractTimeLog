@@ -106,7 +106,7 @@ def draw_line_chart(all_time):
 
     plt.xlabel("times")
     plt.ylabel("time/s")
-    plt.yticks(np.linspace(0, np.ceil(max_time_val), np.ceil(max_time_val) * 2 + 1))
+    plt.yticks(np.linspace(0, int(max_time_val + 1), int(max_time_val + 1) * 2 + 1))
     plt.xticks([x for x in range(len(all_time[0]) + 1) if x % 2 == 0])
     plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.4)
     plt.title("steps run time")

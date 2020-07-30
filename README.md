@@ -1,5 +1,7 @@
 根据关键字提取（手机adb）log 中的时间信息，计算平均值并绘出折线图
+
 # 需求来源
+
 快速统计大量日志中包含的不同方法/算法执行时间的平均值
 
 log 形如：
@@ -14,7 +16,7 @@ log 形如：
 
 而我们关心的部分是 step * run time 后面的时间信息，我们要做的最基本的就是分别提取出每一步的时间并计算平均值。
 
-# 执行本demo 后的输出文本：
+# 执行本demo 后console 输出的内容：
 
 ```log
 step: step 1 run time.* avg:  1.5560642199189967
@@ -25,28 +27,38 @@ e_addend_list sum time:  9.839641510755472
 group_count 10
 ```
 
-# 折线图展示结果
+# 结果展示
+
+使用matplotlib 折线图    
 ![](line_chart.png)
 
+excel 平均值和折线图  
+![](line_chart_xlsx.png)
+
 # 基本实现逻辑
+
 1. 使用正则表达式从所有日志中过滤出包含时间信息的文本段，这一步得到的结果为
-```log
-step 0 run time: 0.8911336784355443s
-step 1 run time: 1.1810907386805247s
-step 2 run time: 2.4233383032426414s
-step 3 run time: 3.0417470428523474s
-step 4 run time: 4.364102617436791s
-step 5 run time: 5.5701353885438145s
-step 6 run time: 6.346673583900075s
-```
+    ```log
+    step 0 run time: 0.8911336784355443s
+    step 1 run time: 1.1810907386805247s
+    step 2 run time: 2.4233383032426414s
+    step 3 run time: 3.0417470428523474s
+    step 4 run time: 4.364102617436791s
+    step 5 run time: 5.5701353885438145s
+    step 6 run time: 6.346673583900075s
+    ```
 2. 使用正则表达式从上一步的结果中匹配出时间信息  
 分别匹配出方法/算法的每一步耗时信息存入list，然后所有步骤的list 再构成一个list，可以理解为是个二维数组。
 使用提取出的时间数字计算均值，或者其中某几步的时间之和。
-3. 使用matplotlib 绘图展示结果
+3. 使用matplotlib 绘图展示结果  
+这一步可选，默认不开启。执行这一步有个要求，那就是提出出来的的每个步骤数量是相同的，如果log 中有丢失若干行，导致各步数出现次数不同吗，则无法绘图。
+4. 将提取的时间结果导出到excel  
+数据按”步骤“ 到处，并输出每一步的平均值，同时导出折线图展示每步数据。这里建议开启”过滤不完整组log“选项，否则每一个纵向的数据可能不是同一组出现的，那就没意义。
 
 # 使用方法
+
 已经将需要改动的部分尽量提取到了配置文件config_ex.ini 中  
-配置解读：
+config.ini 配置解读：
 ```ini
 ;需要分析的日志文件名
 [file]
@@ -57,9 +69,9 @@ file_name = target_hcz017.log
 e_all_step = step.*run time.*
 ; 需要计算平均值的步骤的这正则表达式，以换行区分每一步，直接新增或删除即可，但新增的step 一定要包含在all_step 过滤出的结果中
 e_step_list = step 1 run time.*
-;              step 2 run time.*
+              step 2 run time.*
               step 3 run time.*
-;              step 4 run time.*
+              step 4 run time.*
               step 5 run time.*
               step 6 run time.*
 ; 这个配置是用来计算所有步骤中某几步的和的，如果不需要可以将等号右边的内容删除
@@ -70,13 +82,20 @@ e_addend_list = step 3 run time.*
 [calc]
 exclude_first_snapshot = false
 ```
+
+main.py 配置解读
+```python
+# 配置文件，用户可以预先配置多个不同配置文件
+CONFIG_FILE = 'config/config_ex.ini'
+# 提取出的时间log 保存到此文件
+TIME_LOG_FILE = 'out/extract_time.log'
+# 提取出的时间log 把不是整组的log 过滤后保存到此文件
+FILTERED_TIME_LOG = 'out/filtered_time_log.log'
+# 结果导出到此 excel 文件，入宫设置为None，则保存到和log 同名的xlsx 文件中
+# EXPORTED_EXCEL_FILE = 'out/calc_result.xlsx'
+EXPORTED_EXCEL_FILE = None
+```
+
 # 运行环境
-python 3.6 + numpy + matplotlib 
 
-# Todo
-1. 将输出结果写入文件
-2. 分离步骤，直接从第二步开始执行  
-目前直接从第二步开始执行，去读第一步生成的文件会报错。
-# PS
-
-这本是一个不复杂的小程序，但本人新手第一次根据自己需求写的python 程序，其中肯定很多不合理不够好的地方，希望大家能提点意见和建议，谢谢。
+python 3.6 + numpy + matplotlib + re + configparser + xlsxwriter

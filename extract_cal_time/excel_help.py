@@ -32,8 +32,12 @@ def export2excel_and_draw_line_chart(src_data, out_excel_file, cols_names):
                 sheet.write(line_num, i + 1, float(single_time))
         if (len(time_list) == 0):
             return
-        sheet.write(len(time_list) + 2, i + 1, np.mean(time_list))
         sheet.write(len(time_list) + 2, 0, 'avg')
+        sheet.write(len(time_list) + 2, i + 1, np.mean(time_list))
+        sheet.write(len(time_list) + 3, 0, 'max')
+        sheet.write(len(time_list) + 3, i + 1, np.max(time_list))
+        sheet.write(len(time_list) + 4, 0, 'min')
+        sheet.write(len(time_list) + 4, i + 1, np.min(time_list))
         time_log_file.close()
     for i in range(0, len(cols_names)):
         chart.add_series({
@@ -43,5 +47,5 @@ def export2excel_and_draw_line_chart(src_data, out_excel_file, cols_names):
             'line': {'color': color[i % len(color)]},
         })
         chart.set_size({'x_scale': 2, 'y_scale': 2})
-    sheet.insert_chart('I10', chart, {'x_offset': 50, 'y_offset': 50})
+    sheet.insert_chart('I2', chart, {'x_offset': 50, 'y_offset': 50})
     workbook.close()

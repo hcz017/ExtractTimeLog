@@ -43,8 +43,8 @@ def calc_step_avg_time(time_log_file, e_step_list, exclude_first_snapshot):
         time_log.close()
         # print('all_time_table', all_time_table)
         # print('step:', step, '\t time list:', step_time_list, 'len:', len(step_time_list))
-        print('[step:', step, '][times:', lens, ']\t[avg:', avg, '][ min:', "{:.3f}".format(min_time_val), '][max:',
-              "{:.3f}".format(max_time_val), ']')
+        print('[step:', step, '][times:', lens, ']\t[avg:', avg, '] [max:',
+              "{:.3f}".format(max_time_val), '] [ min:', "{:.3f}".format(min_time_val), ']')
 
 
 def filter_time_log(time_log_file, out_file, e_step_list):
@@ -110,11 +110,11 @@ def extract_time_log_to_file(src_file_name, e_all_steps, result_file):
 def process_ori_log_file(src_file_name, extract_cfg, out_time_log_file,
                          need_filter_log, filtered_time_log):
     print(" -------- process_ori_log_file --------")
-    print(" src_file_name：", src_file_name, " all step: ", extract_cfg.e_all_step)
+    # print("src_file_name：", src_file_name, "\nall step: ", extract_cfg.e_all_step)
     extract_time_log_to_file(src_file_name, extract_cfg.e_all_step, out_time_log_file)
     if need_filter_log:
         filter_time_log(out_time_log_file, filtered_time_log, extract_cfg.e_step_list)
         calc_step_avg_time(filtered_time_log, extract_cfg.e_step_list, extract_cfg.exclude_first_snapshot)
     else:
         calc_step_avg_time(out_time_log_file, extract_cfg.e_step_list, extract_cfg.exclude_first_snapshot)
-    print(" -------- process_ori_log_file --------\n")
+    print(" -------- process_ori_log_file --------")

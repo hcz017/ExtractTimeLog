@@ -8,7 +8,7 @@ class Configuration:
 
 
 def load_configs(config_file):
-    print(" -------- load_configs --------")
+    # print(" -------- load_configs --------")
     cf = configparser.ConfigParser()
     cf.read(config_file)
 
@@ -27,9 +27,9 @@ def load_configs(config_file):
                 all_step = all_step + "|"
             Configuration.e_all_step = all_step
 
-    print('all step: ', Configuration.e_all_step, ' len ', len(Configuration.e_all_step))
-    print('e_step_list: ', Configuration.e_step_list, ' len ', len(Configuration.e_step_list))
-    print(" -------- load_configs --------\n")
+    # print('all step: ', Configuration.e_all_step, ' len ', len(Configuration.e_all_step))
+    # print('e_step_list: ', Configuration.e_step_list, ' len ', len(Configuration.e_step_list))
+    # print(" -------- load_configs --------\n")
 
 
 def get_configuration(config_file=""):
@@ -39,11 +39,11 @@ def get_configuration(config_file=""):
 
 
 def override_configuration(argv):
-    print(" -------- override -------- ")
+    # print(" -------- override -------- ")
     input_steps = ""
     try:
         opts, args = getopt.getopt(argv, "hi:E:", ["input=", "expression="])
-        print(opts, args)
+        # print(opts, args)
     except getopt.GetoptError:
         print('test.py -i <input_file> -E <expression>')
         sys.exit(2)
@@ -53,15 +53,15 @@ def override_configuration(argv):
             sys.exit()
         elif opt in ("-i", "--input"):
             Configuration.src_log_file_name = arg
-            print("input ", Configuration.src_log_file_name)
+            # print("input file: ", Configuration.src_log_file_name)
         elif opt in ("-E", "--expression"):
             input_steps = arg
-            print("input_steps ", input_steps)
+            # print("input_steps: ", input_steps)
             Configuration.e_all_step = input_steps
             Configuration.e_step_list = input_steps.split('|')
 
-            print("e_all_step ", Configuration.e_all_step)
-            print("e_step_list ", Configuration.e_step_list)
-    print(" -------- override --------\n ")
+            # print("e_all_step ", Configuration.e_all_step)
+            # print("e_step_list ", Configuration.e_step_list)
+    # print(" -------- override --------\n ")
 
     return Configuration

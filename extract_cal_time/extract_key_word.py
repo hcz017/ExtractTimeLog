@@ -66,12 +66,13 @@ def filter_time_log(time_log_file, out_file, e_step_list):
     out_log.close()
 
 
-# def draw_line_chart(all_time):
+# def draw_line_chart(all_time, e_step_list):
+#     step_list = e_step_list
 #     x = np.arange(1, len(all_time[0]) + 1, 1)
 #     step_name_index = 0
 #     for step_time_list in all_time:
 #         # print('x:', len(x), ' len step_time_list: ', len(step_time_list))
-#         plt.plot(x, step_time_list, label=E_STEP_LIST[step_name_index])
+#         plt.plot(x, step_time_list, label=step_list[step_name_index])
 #         step_name_index += 1
 
 #     plt.xlabel('times')
@@ -115,6 +116,7 @@ def process_ori_log_file(src_file_name, extract_cfg, out_time_log_file,
     if need_filter_log:
         filter_time_log(out_time_log_file, filtered_time_log, extract_cfg.e_step_list)
         calc_step_avg_time(filtered_time_log, extract_cfg.e_step_list, extract_cfg.exclude_first_snapshot)
+        # draw_line_chart(all_time_table, extract_cfg.e_step_list)
     else:
         calc_step_avg_time(out_time_log_file, extract_cfg.e_step_list, extract_cfg.exclude_first_snapshot)
     print(" -------- process_ori_log_file --------")

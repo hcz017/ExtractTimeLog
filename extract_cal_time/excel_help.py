@@ -6,12 +6,12 @@ import numpy as np
 def export2excel_and_draw_line_chart(src_data, out_excel_file, cols_names):
     time_log_file = None
     line_num = 0
-    print("export data to: ", out_excel_file)
+    print("export result to: ", out_excel_file)
     workbook = xlsxwriter.Workbook(out_excel_file)
     sheet = workbook.add_worksheet("sheet1")
     chart = workbook.add_chart({'type': 'line'})
-    color = ['black', 'blue', 'brown', 'cyan', 'gray', 'magenta', 'navy', 'orange', 'pink', 'purple',
-             'red', 'silver', 'white', 'yellow']
+    color = ['black', 'blue', 'brown', 'cyan', 'gray', 'magenta', 'navy', 'orange', 'pink', 'purple', 'red', 'silver',
+             'white', 'yellow']
     for i in range(0, len(cols_names)):
         sheet.write(0, i + 1, cols_names[i])
         line_num = 0
@@ -30,6 +30,8 @@ def export2excel_and_draw_line_chart(src_data, out_excel_file, cols_names):
                 single_time = eval(numbers[len(numbers) - 1])
                 time_list.append(single_time)
                 sheet.write(line_num, i + 1, float(single_time))
+        if (len(time_list) == 0):
+            return
         sheet.write(len(time_list) + 2, i + 1, np.mean(time_list))
         sheet.write(len(time_list) + 2, 0, 'avg')
         time_log_file.close()

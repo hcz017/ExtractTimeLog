@@ -23,7 +23,6 @@ step: step 1 run time.* avg:  1.5560642199189967
 step: step 3 run time.* avg:  3.419958096268208
 step: step 5 run time.* avg:  5.501313495225281
 step: step 6 run time.* avg:  6.419683414487264
-e_addend_list sum time:  9.839641510755472
 group_count 10
 ```
 
@@ -74,28 +73,17 @@ e_step_list = step 1 run time.*
               step 4 run time.*
               step 5 run time.*
               step 6 run time.*
-; 这个配置是用来计算所有步骤中某几步的和的，如果不需要可以将等号右边的内容删除
-[sum]
-e_addend_list = step 3 run time.*
-              step 6 run time.*
+
 ; 计算平均值时是否需要排除第一组数据，考虑到有些算法第一次初始化比较耗时，在计算平均值时可能需要去除第一组的影响（绘图结果不受此配置影响）
 [calc]
 exclude_first_snapshot = false
+
+; 过滤掉不完整的log 组，加入一个完整的流程中应包含6 个step，如果抓的log 中其中一组丢失了中间几个step，配置下面的参数为ture 则忽略这一组
+[etc]
+filter_incomplete_log_group = true
 ```
 
-main.py 配置解读
-```python
-# 配置文件，用户可以预先配置多个不同配置文件
-CONFIG_FILE = 'config/config_ex.ini'
-# 提取出的时间log 保存到此文件
-TIME_LOG_FILE = 'out/extract_time.log'
-# 提取出的时间log 把不是整组的log 过滤后保存到此文件
-FILTERED_TIME_LOG = 'out/filtered_time_log.log'
-# 结果导出到此 excel 文件，入宫设置为None，则保存到和log 同名的xlsx 文件中
-# EXPORTED_EXCEL_FILE = 'out/calc_result.xlsx'
-EXPORTED_EXCEL_FILE = None
-```
 
-# 运行环境
+# 配置运行环境
 
-python 3.6 + numpy + matplotlib + re + configparser + xlsxwriter
+pip install -r requirements.txt

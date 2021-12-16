@@ -53,7 +53,7 @@ def filter_time_log(time_log_file, out_file, e_step_list):
     out_log = open(out_file, 'w')
     time_log_list = time_log.readlines()
 
-    for line_idx in range(0, len(time_log_list)):
+    for line_idx in range(0, len(time_log_list) - len(step_list) + 1):
         if re.search(step_list[0], time_log_list[line_idx]):
             match_cnt = 0
             for i in range(1, len(step_list)):

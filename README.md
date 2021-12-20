@@ -82,8 +82,15 @@ exclude_first_snapshot = false
 [etc]
 filter_incomplete_log_group = true
 ```
-
+2021/12/20  
+新增使用参数指定输入文件和解析关键字  
+python.exe .\extract_cal_time\main.py -i .\6811fusion_3281.txt -E "fusion total"  
+-i input 文件  
+-E 关键字，支持正则表达式  
 
 # 配置运行环境
 
 pip install -r requirements.txt
+
+# 源码打包成ext
+pyinstaller -F .\extract_cal_time\main.py -p .\extract_cal_time\

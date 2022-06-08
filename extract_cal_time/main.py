@@ -20,7 +20,10 @@ if len(argv) != 0:
     extract_cfg = cfg_help.override_configuration(argv)
 
 # generate out file name for excel
-out_excel_file = utils.gen_out_file_name(extract_cfg.src_log_file_name)
+if len(extract_cfg.out_file_name) > 0:
+    out_excel_file = extract_cfg.out_file_name + '.xlsx'
+else:
+    out_excel_file = utils.gen_out_file_path(extract_cfg.src_log_file_name)
 
 # flag for whether to ignore in complete log group
 filter_incomplete_log_group = extract_cfg.filter_incomplete_log_group

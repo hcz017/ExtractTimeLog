@@ -1,19 +1,24 @@
 import re
+
 import numpy as np
 
 # from matplotlib import pyplot as plt
 
-global E_STEP_LIST, all_time_table, max_time_val
+global all_time_table, max_time_val
 
 
-def get_step_time(step_name, time_log_object):
-    # print('get_step_time:', step_name)
+def get_step_time(step_key, time_log_object):
+    # print('get_step_time:', step_key)
     time_list = []
+    offset = 0
     for line in time_log_object:
-        match_step = re.search(step_name, line)
+        match_step = re.search(step_key, line)
         if match_step:
-            numbers = re.findall(r'\d+\.\d*', line)
-            single_time = eval(numbers[len(numbers) - 1])
+            numer_in_step_key = re.search('\d+', step_key)
+            if numer_in_step_key:
+                offset = numer_in_step_key.end()
+            numbers = re.findall(r'\d+\.?\d*', line[match_step.start(0) + offset:])
+            single_time = eval(numbers[0])
             time_list.append(single_time)
     return time_list
 
@@ -31,9 +36,7 @@ def calc_step_avg_time(time_log_file, e_step_list, exclude_first_snapshot):
         else:
             all_time_table.append(step_time_list)
             max_time_val = max(step_time_list)
-            # max_time_val = "{:.3f}".format(max_time_val)
             min_time_val = min(step_time_list)
-            # min_time_val = "{:.3f}".format(min_time_val)
             if exclude_first_snapshot:
                 lens = len(step_time_list) - 1
                 avg = "{:.3f}".format((sum(step_time_list) - step_time_list[0]) / (len(step_time_list) - 1))
@@ -44,7 +47,8 @@ def calc_step_avg_time(time_log_file, e_step_list, exclude_first_snapshot):
         # print('all_time_table', all_time_table)
         # print('step:', step, '\t time list:', step_time_list, 'len:', len(step_time_list))
         print('[step:', step, '][times:', lens, ']\t[avg:', avg, '] [max:',
-              "{:.3f}".format(max_time_val), '] [ min:', "{:.3f}".format(min_time_val), ']')
+              "{:.3f}".format(max_time_val), '] [min:', "{:.3f}".format(min_time_val), '] [gap(max-min):',
+              "{:.3f}".format(max_time_val - min_time_val), ']')
 
 
 def filter_time_log(time_log_file, out_file, e_step_list):
@@ -90,7 +94,12 @@ def extract_time_log_to_file(src_file_name, e_all_steps, result_file):
     time_log_file = None
     try:
         # encoding maybe wrong
-        src_file = open(src_file_name, encoding='iso-8859-1')
+        # windows cmd/cmder/gitbash/LogFilter/vscode_cmd/vscode_powershell/powershell
+        # src_file = open(src_file_name, encoding='iso-8859-1')
+        # windows cmd/cmder/gitbash/LogFilter/vscode_cmd
+        src_file = open(src_file_name, encoding='utf-8')
+        # windows powershell/vscode_powershell
+        # src_file = open(src_file_name, encoding='utf-16')
         time_log_file = open(result_file, 'w')
         # time_spilt_file = open('extract_split_time.log', 'w')  # not necessary
     except IOError:

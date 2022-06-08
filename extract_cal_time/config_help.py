@@ -1,9 +1,13 @@
 import configparser
-import sys
 import getopt
+import os
+import sys
 
 
 class Configuration:
+    filter_incomplete_log_group = False
+    exclude_first_snapshot = False
+    out_file_name = ''
     pass
 
 
@@ -33,6 +37,9 @@ def load_configs(config_file):
 
 
 def get_configuration(config_file=""):
+    if not os.path.exists(config_file):
+        print('config file not exist!!')
+        return
     if len(config_file) != 0:
         load_configs(config_file)
     return Configuration
@@ -42,18 +49,20 @@ def override_configuration(argv):
     # print(" -------- override -------- ")
     input_steps = ""
     try:
-        opts, args = getopt.getopt(argv, "hi:E:", ["input=", "expression="])
+        opts, args = getopt.getopt(argv, "hi:E:o:", ["input=", "expression="])
         # print(opts, args)
     except getopt.GetoptError:
         print('test.py -i <input_file> -E <expression>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('test.py -i <input_file> -E <expression>')
+            print('test.py -i <input_file> -E <expression> -o <output(xlsx)>')
             sys.exit()
         elif opt in ("-i", "--input"):
             Configuration.src_log_file_name = arg
             # print("input file: ", Configuration.src_log_file_name)
+        elif opt in ("-o", "--output"):
+            Configuration.out_file_name = arg
         elif opt in ("-E", "--expression"):
             input_steps = arg
             # print("input_steps: ", input_steps)

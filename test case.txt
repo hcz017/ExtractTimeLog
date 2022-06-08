@@ -1,0 +1,15 @@
+pyinstaller -F .\extract_cal_time\main.py -p .\extract_cal_time\
+
+python.exe .\extract_cal_time\main.py
+python.exe .\extract_cal_time\main.py -i .\raw\target_hcz017.log
+python.exe .\extract_cal_time\main.py -i .\raw\target_hcz017.log -E "step 2 run time.*"
+python.exe .\extract_cal_time\main.py -E "step.*run time.*"
+python.exe .\extract_cal_time\main.py -E "step 2 run time.*"
+python.exe .\extract_cal_time\main.py -E "step 2 run time.*|step 3 run time.*"
+
+.\dist\main.exe 
+.\dist\main.exe -i .\raw\target_hcz017.log
+.\dist\main.exe -i .\raw\target_hcz017.log -E "step 2 run time.*"
+.\dist\main.exe -E "step.*run time.*"
+.\dist\main.exe -E "step 2 run time.*"
+.\dist\main.exe -E "step 2 run time.*|step 3 run time.*"

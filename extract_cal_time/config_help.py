@@ -47,7 +47,6 @@ def get_configuration(config_file=""):
 
 def override_configuration(argv):
     # print(" -------- override -------- ")
-    input_steps = ""
     try:
         opts, args = getopt.getopt(argv, "hi:E:o:", ["input=", "expression="])
         # print(opts, args)
@@ -74,3 +73,7 @@ def override_configuration(argv):
     # print(" -------- override --------\n ")
 
     return Configuration
+
+
+if __name__ == '__main__':
+    print("I'm config_help.py")

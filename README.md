@@ -93,4 +93,6 @@ filter_incomplete_log_group = true
 pip install -r requirements.txt
 
 # 源码打包成ext
+```
 pyinstaller -F .\extract_cal_time\main.py -p .\extract_cal_time\
+```

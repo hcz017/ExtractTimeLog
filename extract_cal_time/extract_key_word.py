@@ -14,9 +14,11 @@ def get_step_time(step_key, time_log_object):
     for line in time_log_object:
         match_step = re.search(step_key, line)
         if match_step:
-            numer_in_step_key = re.search('\d+', step_key)
-            if numer_in_step_key:
-                offset = numer_in_step_key.end()
+            # in case step key contains number, like "step 4 do blender", need to add the offset of number "4"
+            number_in_step_key = re.search(r'\d+', step_key)
+            if number_in_step_key:
+                offset = number_in_step_key.end()
+            # match_step.start(0) => key world start position
             numbers = re.findall(r'\d+\.?\d*', line[match_step.start(0) + offset:])
             single_time = eval(numbers[0])
             time_list.append(single_time)
@@ -26,7 +28,6 @@ def get_step_time(step_key, time_log_object):
 def calc_step_avg_time(time_log_file, e_step_list, exclude_first_snapshot):
     global all_time_table, max_time_val
     all_time_table = []
-    total_time = 0
     for step in e_step_list:
         time_log = open(time_log_file)
         step_time_list = get_step_time(step, time_log)
@@ -94,11 +95,11 @@ def extract_time_log_to_file(src_file_name, e_all_steps, result_file):
     time_log_file = None
     try:
         # encoding maybe wrong
-        # windows cmd/cmder/gitbash/LogFilter/vscode_cmd/vscode_powershell/powershell
+        # Windows cmd/cmder/gitbash/LogFilter/vscode_cmd/vscode_powershell/powershell
         # src_file = open(src_file_name, encoding='iso-8859-1')
-        # windows cmd/cmder/gitbash/LogFilter/vscode_cmd
+        # Windows cmd/cmder/gitbash/LogFilter/vscode_cmd
         src_file = open(src_file_name, encoding='utf-8')
-        # windows powershell/vscode_powershell
+        # Windows powershell/vscode_powershell
         # src_file = open(src_file_name, encoding='utf-16')
         time_log_file = open(result_file, 'w')
         # time_spilt_file = open('extract_split_time.log', 'w')  # not necessary
@@ -119,7 +120,7 @@ def extract_time_log_to_file(src_file_name, e_all_steps, result_file):
 
 def process_ori_log_file(src_file_name, extract_cfg, out_time_log_file,
                          need_filter_log, filtered_time_log):
-    print(" -------- process_ori_log_file --------")
+    # print(" -------- process_ori_log_file --------")
     # print("src_file_name：", src_file_name, "\nall step: ", extract_cfg.e_all_step)
     extract_time_log_to_file(src_file_name, extract_cfg.e_all_step, out_time_log_file)
     if need_filter_log:
@@ -128,4 +129,8 @@ def process_ori_log_file(src_file_name, extract_cfg, out_time_log_file,
         # draw_line_chart(all_time_table, extract_cfg.e_step_list)
     else:
         calc_step_avg_time(out_time_log_file, extract_cfg.e_step_list, extract_cfg.exclude_first_snapshot)
-    print(" -------- process_ori_log_file --------")
+    # print(" -------- process_ori_log_file --------")
+
+
+if __name__ == '__main__':
+    print("I'm extract_key_word.py")
